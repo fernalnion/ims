@@ -1,0 +1,31 @@
+version: '3.8'
+networks:
+  ims:
+    driver: bridge
+services:
+  mongo:
+    networks:
+      - ims
+    image: mongo:latest
+    container_name: ims_mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_container_data:/data/db/
+  ims:
+    networks:
+      - ims
+    build:
+      context: ../
+      dockerfile: docker/dockerfile
+    container_name: ims_applocation
+    restart: always
+    links:
+      - mongo
+    env_file:
+      - .env
+    ports:
+      - ${APPLICATIONPORT}:${APPLICATIONPORT}
+volumes:
+  mongodb_container_data:

@@ -1,0 +1,13 @@
+.git
+.nyc_output
+.vscode
+coverage
+dockers
+test
+node_modules
+test.js
+package-lock.json
+*.code-workspace
+.*
+*.md
+*.html

@@ -1,0 +1,8 @@
+FROM node:latest
+ARG NPMTOKEN
+WORKDIR /app
+COPY package.json package.json 
+RUN npm install
+COPY . .
+RUN rm -f .env
+CMD npm start
