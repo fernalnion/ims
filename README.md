@@ -6,3 +6,7 @@ npm install -g @jsdevtools/version-bump-prompt
 npm install eslint -g
 npm install
 ```
+#### dDocker Setup
+```shell
+docker-compose -f docker/docker-compose.yml up --build -d
+```
