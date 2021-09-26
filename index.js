@@ -3,6 +3,7 @@ const compression = require('compression');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 // swagger
 // const swaggerJSDoc = require("swagger-jsdoc");
@@ -20,7 +21,6 @@ const {
   RolesRoutes,
   UsersRoutes,
   PublicRoutes,
-  TokenRoutes,
 } = require('./routes');
 const scripts = require('./scripts');
 
@@ -46,6 +46,7 @@ try {
   app.use(bodyParser.json({ limit: '200mb' }));
   app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
   app.use(compression());
+  app.use(cookieParser());
 
   app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -106,7 +107,6 @@ try {
   app.use('/public', PublicRoutes);
   app.use('/roles', [authJwtMiddleware.validateToken], RolesRoutes);
   app.use('/users', [authJwtMiddleware.validateToken], UsersRoutes);
-  app.use('/tokens', [authJwtMiddleware.validateToken], TokenRoutes);
 
   // create server basred on flag
   const server = JSON.parse(ENABLE_HTTPS_MODE) === true

@@ -1,17 +1,11 @@
 const logger = require('../libraries/logger').getLogger();
-const { RoleModel } = require('../models');
+const { RolesEnum } = require('../enums');
 
 try {
   module.exports = {
-    create: (document) => RoleModel.create(document),
-    update: (roleid, document) => RoleModel.findOneAndUpdate({ roleid }, document, {
-      upsert: true,
-      new: false,
-    }).lean(),
-    delete: (roleid) => RoleModel.deleteOne({ roleid }),
-    getRole: (roleid, rolename) => RoleModel.findOne({ $or: [{ roleid }, { rolename }] }).lean(),
-    getRolesByRolenames: (rolenames) => RoleModel.find({ rolename: { $in: rolenames } }).lean(),
-    getAll: () => RoleModel.find({}).lean(),
+    getRole: (roleid, rolename) => Object.values(RolesEnum).find((role) => role.roleid === roleid || role.rolename === rolename),
+    getRolesByRolenames: (rolenames) => Object.values(RolesEnum).filter((role) => rolenames.includes(role.rolename)),
+    getAll: () => Object.values(RolesEnum),
   };
 } catch (e) {
   logger.error(e);

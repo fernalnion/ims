@@ -13,7 +13,8 @@ const {
   ENABLE_DEBUG_MODE,
   ENABLE_HTTPS_MODE,
   JWT_SECRET,
-  JWT_EXPIRES_IN,
+  JWT_EXPIRES_IN_MINUTE,
+  REFRESH_TOKEN_EXPIRES_IN_MINUTE,
 } = process.env;
 
 // make required parameters as single object
@@ -26,7 +27,8 @@ const config = {
   ENABLE_DEBUG_MODE,
   ENABLE_HTTPS_MODE,
   JWT_SECRET,
-  JWT_EXPIRES_IN,
+  JWT_EXPIRES_IN_MINUTE,
+  REFRESH_TOKEN_EXPIRES_IN_MINUTE,
   version,
   title: description,
 };

@@ -20,8 +20,11 @@ try {
         if (err) {
           return res.status(401).send(utilities.error('Unauthorized!'));
         }
+
+        // authentication and authorization successful
         req.user = await UserBusiness.getUser(decoded.userid);
-        req.token = token;
+        const refreshTokens = await UserBusiness.getRefreshTokens(req.user._id);
+        req.user.ownsToken = (temptoken) => !!refreshTokens.find((x) => x.token === temptoken);
         next();
       });
     },

@@ -13,6 +13,15 @@ try {
           description: 'Administrator Access Level',
         });
       }
+
+      const managerRole = await RoleBusiness.getRole(null, 'manager');
+      if (!managerRole) {
+        await RoleBusiness.create({
+          roleid: uuid4(),
+          rolename: 'manager',
+          description: 'Manager Access Level',
+        });
+      }
     },
   };
 } catch (e) {

@@ -1,10 +1,10 @@
-const routes = require('express').Router();
+const router = require('express').Router();
 const logger = require('../libraries/logger').getLogger();
 const { UserController } = require('../controllers');
 
 try {
-  routes.post('/login', UserController.loginUser);
-  module.exports = routes;
+  router.post('/login', UserController.loginUser);
+  module.exports = router;
 } catch (e) {
   logger.error(e);
 }

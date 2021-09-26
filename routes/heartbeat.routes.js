@@ -1,4 +1,4 @@
-const routes = require('express').Router();
+const router = require('express').Router();
 const { title } = require('../config').config;
 const logger = require('../libraries/logger').getLogger();
 
@@ -28,11 +28,11 @@ try {
    *                  type: string
    *
    */
-  routes.get('/', (_, res) => {
+  router.get('/', (_, res) => {
     res.status(200).json({ message: `Welcome to ${title}` });
   });
 
-  module.exports = routes;
+  module.exports = router;
 } catch (e) {
   logger.error(e);
 }
