@@ -18,6 +18,21 @@ try {
         return res.status(500).send(utilities.error(e.message));
       }
     },
+    revokeTokenByUser: async (req, res) => {
+      try {
+        const remoteAddress = utilities.getIp(req);
+        await TokenBusiness.revokeTokenByUseid(
+          req.token,
+          remoteAddress,
+          req.user.userid,
+        );
+        return res
+          .status(200)
+          .send(utilities.response('All token are revoked!'));
+      } catch (e) {
+        return res.status(500).send(utilities.error(e.message));
+      }
+    },
     getTokenByUserid: async (req, res) => {
       try {
         const result = (

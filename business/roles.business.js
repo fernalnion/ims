@@ -10,6 +10,7 @@ try {
     }).lean(),
     delete: (roleid) => RoleModel.deleteOne({ roleid }),
     getRole: (roleid, rolename) => RoleModel.findOne({ $or: [{ roleid }, { rolename }] }).lean(),
+    getRolesByRolenames: (rolenames) => RoleModel.find({ rolename: { $in: rolenames } }).lean(),
     getAll: () => RoleModel.find({}).lean(),
   };
 } catch (e) {

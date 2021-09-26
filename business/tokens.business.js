@@ -9,30 +9,29 @@ try {
       createdByIp,
       userid,
     }),
-    revokeToken: (token, revokedByIp, revokedByToken) => TokenModel.findOneAndUpdate(
+    revokeToken: (token, revokedByIp, revokedByToken) => TokenModel.updateOne(
       { token },
       {
-        token,
         revoked: Date.now(),
         revokedByIp,
         revokedByToken,
         isActive: false,
       },
-      {
-        upsert: true,
-        new: false,
-      },
     ).lean(),
-    updateTokenExpire: (token) => TokenModel.findOneAndUpdate(
-      { token },
+    revokeTokenByUseid: (token, revokedByIp, userid) => TokenModel.updateMany(
+      { $and: [{ userid }, { token: { $ne: token } }] },
       {
-        token,
-        isExpired: true,
+        revoked: Date.now(),
+        revokedByIp,
+        revokedByToken: token,
         isActive: false,
       },
+    ).lean(),
+    updateTokenExpire: (token) => TokenModel.updateOne(
+      { token },
       {
-        upsert: true,
-        new: false,
+        isExpired: true,
+        isActive: false,
       },
     ).lean(),
     delete: (token) => TokenModel.deleteOne({ token }),
