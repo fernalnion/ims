@@ -1,7 +1,8 @@
-const { v4: uuid4 } = require("uuid");
-const logger = require("../libraries/logger").getLogger();
-const utilities = require("../libraries/utilities");
-const { RoleBusiness } = require("../business");
+const { v4: uuid4 } = require('uuid');
+const lodash = require('lodash');
+const logger = require('../libraries/logger').getLogger();
+const utilities = require('../libraries/utilities');
+const { RoleBusiness } = require('../business');
 
 try {
   module.exports = {
@@ -9,8 +10,7 @@ try {
       try {
         const document = {
           roleid: uuid4(),
-          rolename: req.body.rolename,
-          description: req.body.description,
+          ...req.body,
         };
         const isexist = await RoleBusiness.getRole(null, document.rolename);
         if (isexist) {
@@ -26,10 +26,7 @@ try {
     },
     updateRole: async (req, res) => {
       try {
-        const document = {
-          rolename: req.body.rolename,
-          description: req.body.description,
-        };
+        const document = { ...lodash.omit(req.body, ['_id', 'userid', 'roleid']) };
         await RoleBusiness.update(req.params.roleid, document);
         return res.status(200).send(utilities.response(true));
       } catch (e) {
@@ -38,10 +35,6 @@ try {
     },
     deleteRole: async (req, res) => {
       try {
-        const document = {
-          rolename: req.body.rolename,
-          description: req.body.description,
-        };
         await RoleBusiness.delete(req.params.roleid);
         return res
           .status(200)
@@ -52,15 +45,15 @@ try {
     },
     getRole: async (req, res) => {
       try {
-        const result = await RoleBusiness.getRole(req.params.roleid);
+        const result = lodash.omit(await RoleBusiness.getRole(req.params.roleid), ['_id']);
         return res.status(200).send(utilities.response(result));
       } catch (e) {
         return res.status(500).send(utilities.error(e.message));
       }
     },
-    getRoles: async (req, res) => {
+    getRoles: async (_, res) => {
       try {
-        const result = await RoleBusiness.getAll();
+        const result = (await RoleBusiness.getAll()).map((m) => lodash.omit(m, ['_id']));
         return res.status(200).send(utilities.response(result));
       } catch (e) {
         return res.status(500).send(utilities.error(e.message));

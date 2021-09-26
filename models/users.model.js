@@ -12,9 +12,9 @@ const UserModel = new Schema(
       type: String,
       required: true,
       index: true,
-      unique:true,
+      unique: true,
     },
-    password: {
+    passwordhash: {
       type: String,
       required: true,
     },
@@ -22,7 +22,7 @@ const UserModel = new Schema(
       type: String,
       required: true,
       index: true,
-      unique:true,
+      unique: true,
     },
     firstname: {
       type: String,
@@ -34,17 +34,17 @@ const UserModel = new Schema(
     phone: {
       type: String,
       required: true,
-      unique:true,
+      unique: true,
     },
     roleid: {
       type: String,
       required: true,
     },
-    locked: {
+    isLocked: {
       type: Boolean,
       default: false,
     },
-    activated: {
+    isActivated: {
       type: Boolean,
       default: false,
     },

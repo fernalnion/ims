@@ -8,12 +8,12 @@ const infoFilter = winston.format((info) => (info.level === 'info' || info.level
 const errorFilter = winston.format((info) => (info.level === 'error' ? info : false));
 
 class loggerInstance {
-  constructor(loggerConnectionString, applicationname) {
+  constructor(loggerConnectionString, APPLICATION_NAME) {
     const exceptionHandlers = [
       new winston.transports.MongoDB({
         db: loggerConnectionString,
         name: 'exceptionlog',
-        indexPrefix: `${applicationname}-exception`,
+        indexPrefix: `${APPLICATION_NAME}-exception`,
         level: 'error',
         collection: 'exceptionlog',
         capped: true,
@@ -38,7 +38,7 @@ class loggerInstance {
       new winston.transports.MongoDB({
         db: loggerConnectionString,
         name: 'infolog',
-        indexPrefix: `${applicationname}-info`,
+        indexPrefix: `${APPLICATION_NAME}-info`,
         level: 'info',
         collection: 'infolog',
         capped: true,
@@ -60,7 +60,7 @@ class loggerInstance {
       new winston.transports.MongoDB({
         db: loggerConnectionString,
         name: 'debuglog',
-        indexPrefix: `${applicationname}-debug`,
+        indexPrefix: `${APPLICATION_NAME}-debug`,
         level: 'debug',
         collection: 'debuglog',
         capped: true,
@@ -82,7 +82,7 @@ class loggerInstance {
       new winston.transports.MongoDB({
         db: loggerConnectionString,
         name: 'errorlog',
-        indexPrefix: `${applicationname}-error`,
+        indexPrefix: `${APPLICATION_NAME}-error`,
         level: 'error',
         collection: 'errorlog',
         capped: true,
@@ -108,7 +108,7 @@ class loggerInstance {
       transports,
       exitOnError: false,
       defaultMeta: {
-        application: applicationname,
+        application: APPLICATION_NAME,
         hostname: os.hostname(),
         ipaddress: ip.address(),
       },

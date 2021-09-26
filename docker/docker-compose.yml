@@ -12,7 +12,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongodb_container_data:/data/db/
+      - ims_mongodb_container_data:/data/db/
   ims:
     networks:
       - ims
@@ -26,6 +26,6 @@ services:
     env_file:
       - .env
     ports:
-      - ${APPLICATIONPORT}:${APPLICATIONPORT}
+      - ${APPLICATION_PORT}:${APPLICATION_PORT}
 volumes:
-  mongodb_container_data:
+  ims_mongodb_container_data:

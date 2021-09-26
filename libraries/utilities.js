@@ -1,4 +1,5 @@
-const logger = require("./logger").getLogger();
+const logger = require('./logger').getLogger();
+
 try {
   module.exports = {
     response: (data) => ({
@@ -11,6 +12,10 @@ try {
       error: true,
       errormessage,
     }),
+    getIp: (req) => {
+      const remoteAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+      return remoteAddress.replace('::ffff:', '');
+    },
   };
 } catch (e) {
   logger.error(e);

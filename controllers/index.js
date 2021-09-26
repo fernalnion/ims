@@ -1,9 +1,11 @@
 const RoleController = require('./roles.controller');
-// const UserModel = require('./users.business');
+const UserController = require('./users.controller');
+const TokenController = require('./tokens.controllers');
 
 const controllers = {
-    RoleController,
-//   UserModel,
+  RoleController,
+  UserController,
+  TokenController,
 };
 
 module.exports = controllers;

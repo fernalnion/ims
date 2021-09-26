@@ -1,4 +1,4 @@
-const { MONGODBCONNECTIONSTRING, MONGOLOGSNAME, APPLICATIONNAME } = require('../config').config;
+const { MONGODB_CONNECTION_STRING, MONGODB_LOGS_NAME, APPLICATION_NAME } = require('../config').config;
 const loggerInstance = require('./mongodbLoggerInstance');
 
 class logger {
@@ -8,10 +8,10 @@ class logger {
 
   static getLogger() {
     if (!logger.instance) {
-      const loggerConnectionString = `${MONGODBCONNECTIONSTRING}/${MONGOLOGSNAME}`;
+      const loggerConnectionString = `${MONGODB_CONNECTION_STRING}/${MONGODB_LOGS_NAME}`;
       logger.instance = new loggerInstance(
         loggerConnectionString,
-        APPLICATIONNAME,
+        APPLICATION_NAME,
       );
     }
     return logger.instance.logger;

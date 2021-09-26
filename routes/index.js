@@ -1,10 +1,15 @@
 const HeartbeatRoutes = require('./heartbeat.routes');
-const RoleRoutes = require('./roles.routes');
-
+const RolesRoutes = require('./roles.routes');
+const UsersRoutes = require('./users.routes');
+const PublicRoutes = require('./public.routes');
+const TokenRoutes = require('./tokens.routes');
 
 const routes = {
-    HeartbeatRoutes,
-    RoleRoutes,
+  HeartbeatRoutes,
+  RolesRoutes,
+  UsersRoutes,
+  PublicRoutes,
+  TokenRoutes,
 };
 
 module.exports = routes;

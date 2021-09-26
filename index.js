@@ -1,49 +1,60 @@
 // express
-const compression = require("compression");
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+const compression = require('compression');
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 // swagger
 // const swaggerJSDoc = require("swagger-jsdoc");
 // const swaggerUi = require("swagger-ui-express");
 
 // http & https, filesystem library
-const http = require("http");
-const https = require("https");
-const fs = require("fs");
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
 
 // routes
-const { HeartbeatRoutes, RoleRoutes } = require("./routes");
+const { authJwtMiddleware } = require('./middleware');
+const {
+  HeartbeatRoutes,
+  RolesRoutes,
+  UsersRoutes,
+  PublicRoutes,
+  TokenRoutes,
+} = require('./routes');
+const scripts = require('./scripts');
 
 // logger
 const db = require('./libraries/db');
-const logger = require("./libraries/logger").getLogger();
+const logger = require('./libraries/logger').getLogger();
 
 const {
   // version, title,
-  APPLICATIONPORT,
-  ENABLEHTTPSMODE,
-} = require("./config").config;
+  APPLICATION_PORT,
+  ENABLE_HTTPS_MODE,
+} = require('./config').config;
 
 try {
   const app = express();
   db.connect();
 
+  // defaul scripts
+  scripts.init();
+
   // parse requests of content-type - application/json
   app.use(cors());
-  app.use(bodyParser.json({ limit: "200mb" }));
-  app.use(bodyParser.urlencoded({ limit: "200mb", extended: true }));
+  app.use(bodyParser.json({ limit: '200mb' }));
+  app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
   app.use(compression());
 
   app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept',
     );
-    res.setHeader("Access-Control-Allow-Credentials", true);
+    res.setHeader('Access-Control-Allow-Credentials', true);
     next();
   });
 
@@ -91,22 +102,24 @@ try {
   //   swaggerUi.serve,
   //   swaggerUi.setup(swaggerSpec, swaggerUiOptions)
   // );
-  app.use("/heartbeat", HeartbeatRoutes);
-  app.use("/roles", RoleRoutes);
+  app.use('/heartbeat', HeartbeatRoutes);
+  app.use('/public', PublicRoutes);
+  app.use('/roles', [authJwtMiddleware.validateToken], RolesRoutes);
+  app.use('/users', [authJwtMiddleware.validateToken], UsersRoutes);
+  app.use('/tokens', [authJwtMiddleware.validateToken], TokenRoutes);
 
   // create server basred on flag
-  const server =
-    JSON.parse(ENABLEHTTPSMODE) === true
-      ? https.createServer(
-          {
-            key: fs.readFileSync("./certificates/server.key"),
-            cert: fs.readFileSync("./certificates/server.cert"),
-          },
-          app
-        )
-      : http.createServer(app);
-  server.listen(APPLICATIONPORT, () => {
-    logger.info(`API is running under port number -> ${APPLICATIONPORT}`);
+  const server = JSON.parse(ENABLE_HTTPS_MODE) === true
+    ? https.createServer(
+      {
+        key: fs.readFileSync('./certificates/server.key'),
+        cert: fs.readFileSync('./certificates/server.cert'),
+      },
+      app,
+    )
+    : http.createServer(app);
+  server.listen(APPLICATION_PORT, () => {
+    logger.info(`API is running under port number -> ${APPLICATION_PORT}`);
   });
 } catch (e) {
   logger.error(e);
