@@ -50,7 +50,7 @@ TokenModel.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
-    return lodash.omit(ret, ["_id", "user"]);
+    return lodash.omit(ret, ["_id", "userid"]);
   },
 });
 module.exports = mongoose.model("RefreshToken", TokenModel);

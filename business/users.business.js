@@ -88,12 +88,12 @@ try {
         refreshToken: newRefreshToken.token,
       };
     },
-    getRefreshTokens: async (usreid) => {
-      const isuserExist = await UserModel.findOne({ usreid });
+    getRefreshTokens: async (userid) => {
+      const isuserExist = await UserModel.findOne({ userid });
       if (!isuserExist) throw new Error("User not found");
 
       // return refresh tokens for user
-      const refreshTokens = await TokenModel.find({ userid: usreid });
+      const refreshTokens = await TokenModel.find({ userid });
       return refreshTokens;
     },
 
