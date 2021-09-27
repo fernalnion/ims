@@ -6,6 +6,7 @@ const CategoryBusiness = require('./categories.business');
 const ProductBusiness = require('./products.business');
 const PaymentBusiness = require('./payments.business');
 const ItemBusiness = require('./items.business');
+const OrderBusiness = require('./orders.business');
 
 const business = {
   RoleBusiness,
@@ -17,7 +18,8 @@ const business = {
   CategoryBusiness,
   ProductBusiness,
   PaymentBusiness,
-  ItemBusiness
+  ItemBusiness,
+  OrderBusiness
 };
 
 module.exports = business;

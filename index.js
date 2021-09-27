@@ -28,6 +28,7 @@ const {
   ProductRoutes,
   PaymentRoutes,
   ItemRoutes,
+  OrderRoutes,
 } = require("./routes");
 const scripts = require("./scripts");
 
@@ -122,6 +123,7 @@ try {
   app.use("/products", [authJwtMiddleware.validateToken], ProductRoutes);
   app.use("/payments", [authJwtMiddleware.validateToken], PaymentRoutes);
   app.use("/items", [authJwtMiddleware.validateToken], ItemRoutes);
+  app.use("/orders", [authJwtMiddleware.validateToken], OrderRoutes);
 
   // create server basred on flag
   const server =

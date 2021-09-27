@@ -9,7 +9,7 @@ try {
     createProduct: async (req, res) => {
       try {
         const document = {
-          userid: uuid4(),
+          productid: uuid4(),
           ...req.body,
         };
         const isexist = await ProductBusiness.getProduct(null, document.name);

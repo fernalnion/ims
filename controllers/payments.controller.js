@@ -9,7 +9,7 @@ try {
     createPayment: async (req, res) => {
       try {
         const document = {
-          userid: uuid4(),
+          paymentid: uuid4(),
           ...req.body,
         };
         const result = await PaymentBusiness.create(document);

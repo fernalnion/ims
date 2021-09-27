@@ -9,7 +9,7 @@ try {
     createItem: async (req, res) => {
       try {
         const document = {
-          userid: uuid4(),
+          itemid: uuid4(),
           ...req.body,
         };
         const result = await ItemBusiness.create(document);

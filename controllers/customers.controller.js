@@ -9,7 +9,7 @@ try {
     createCustomer: async (req, res) => {
       try {
         const document = {
-          userid: uuid4(),
+          customerid: uuid4(),
           ...req.body,
         };
         const isexist = await CustomerBusiness.getCustomer(

@@ -6,6 +6,7 @@ const CategoryController = require('./catogories.controller');
 const ProductController = require('./products.controller');
 const PaymentController = require('./payments.controller');
 const ItemController = require('./items.controller');
+const OrderController = require('./orders.controller');
 
 const controllers = {
   RoleController,
@@ -18,6 +19,7 @@ const controllers = {
   ProductController,
   PaymentController,
   ItemController,
+  OrderController,
 };
 
 module.exports = controllers;

@@ -9,7 +9,7 @@ try {
     createCategory: async (req, res) => {
       try {
         const document = {
-          userid: uuid4(),
+          categoryid: uuid4(),
           ...req.body,
         };
         const isexist = await CategoryBusiness.getCategory(null, document.name);
