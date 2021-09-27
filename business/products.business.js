@@ -1,5 +1,5 @@
-const logger = require("../libraries/logger").getLogger();
-const { ProductModel } = require("../models");
+const logger = require('../libraries/logger').getLogger();
+const { ProductModel } = require('../models');
 
 try {
   // module exports
@@ -15,7 +15,7 @@ try {
         {
           upsert: true,
           new: false,
-        }
+        },
       ).lean();
       return data;
     },
