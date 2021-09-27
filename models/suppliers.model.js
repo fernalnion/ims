@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
+const lodash = require('lodash');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const SupplierModel = new Schema(
   {
@@ -18,10 +19,12 @@ const SupplierModel = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     phone: {
       type: String,
       required: true,
+      unique: true,
     },
     address1: {
       type: String,
@@ -54,14 +57,14 @@ const SupplierModel = new Schema(
   {
     versionKey: false,
     timestamps: false,
-  }
+  },
 );
 
-SupplierModel.set("toJSON", {
+SupplierModel.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
-    return lodash.omit(ret, ["_id"]);
+    return lodash.omit(ret, ['_id']);
   },
 });
-module.exports = mongoose.model("Supplier", SupplierModel);
+module.exports = mongoose.model('Supplier', SupplierModel);

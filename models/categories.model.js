@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
+const lodash = require('lodash');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const CategoryModel = new Schema(
   {
@@ -22,14 +23,14 @@ const CategoryModel = new Schema(
   {
     versionKey: false,
     timestamps: false,
-  }
+  },
 );
 
-CategoryModel.set("toJSON", {
+CategoryModel.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
-    return lodash.omit(ret, ["_id"]);
+    return lodash.omit(ret, ['_id']);
   },
 });
-module.exports = mongoose.model("Category", CategoryModel);
+module.exports = mongoose.model('Category', CategoryModel);

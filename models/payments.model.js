@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
+const lodash = require('lodash');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const PaymentModel = new Schema(
   {
@@ -20,14 +21,14 @@ const PaymentModel = new Schema(
   {
     versionKey: false,
     timestamps: false,
-  }
+  },
 );
 
-PaymentModel.set("toJSON", {
+PaymentModel.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
-    return lodash.omit(ret, ["_id"]);
+    return lodash.omit(ret, ['_id']);
   },
 });
-module.exports = mongoose.model("Payment", PaymentModel);
+module.exports = mongoose.model('Payment', PaymentModel);

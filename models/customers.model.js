@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
+const lodash = require('lodash');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const CustomerModel = new Schema(
   {
@@ -19,10 +20,12 @@ const CustomerModel = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     phone: {
       type: String,
       required: true,
+      unique: true,
     },
     address1: {
       type: String,
@@ -50,20 +53,20 @@ const CustomerModel = new Schema(
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
     },
   },
   {
     versionKey: false,
     timestamps: false,
-  }
+  },
 );
 
-CustomerModel.set("toJSON", {
+CustomerModel.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
-    return lodash.omit(ret, ["_id", "user"]);
+    return lodash.omit(ret, ['_id', 'user']);
   },
 });
-module.exports = mongoose.model("Customer", CustomerModel);
+module.exports = mongoose.model('Customer', CustomerModel);

@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
+const lodash = require('lodash');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const ProductModel = new Schema(
   {
@@ -31,24 +32,24 @@ const ProductModel = new Schema(
     },
     supplier: {
       type: Schema.Types.ObjectId,
-      ref: "Supplier",
+      ref: 'Supplier',
     },
     category: {
       type: Schema.Types.ObjectId,
-      ref: "Category",
+      ref: 'Category',
     },
   },
   {
     versionKey: false,
     timestamps: false,
-  }
+  },
 );
 
-ProductModel.set("toJSON", {
+ProductModel.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
-    return lodash.omit(ret, ["_id", "supplier", "category"]);
+    return lodash.omit(ret, ['_id', 'supplier', 'category']);
   },
 });
-module.exports = mongoose.model("Product", ProductModel);
+module.exports = mongoose.model('Product', ProductModel);

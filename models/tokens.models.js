@@ -1,6 +1,6 @@
-const lodash = require("lodash");
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
+const lodash = require('lodash');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const TokenModel = new Schema(
   {
@@ -9,7 +9,7 @@ const TokenModel = new Schema(
       required: true,
       index: true,
     },
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     expires: {
       type: Date,
       required: true,
@@ -35,22 +35,18 @@ const TokenModel = new Schema(
   {
     versionKey: false,
     timestamps: false,
-  }
+  },
 );
 
-TokenModel.virtual("isExpired").get(function () {
-  return Date.now() >= this.expires;
-});
+TokenModel.virtual('isExpired').get(() => Date.now() >= this.expires);
 
-TokenModel.virtual("isActive").get(function () {
-  return !this.revoked && !this.isExpired;
-});
+TokenModel.virtual('isActive').get(() => !this.revoked && !this.isExpired);
 
-TokenModel.set("toJSON", {
+TokenModel.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
-    return lodash.omit(ret, ["_id", "userid"]);
+    return lodash.omit(ret, ['_id', 'userid']);
   },
 });
-module.exports = mongoose.model("RefreshToken", TokenModel);
+module.exports = mongoose.model('RefreshToken', TokenModel);

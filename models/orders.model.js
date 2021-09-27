@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
+const lodash = require('lodash');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const OrderModel = new Schema(
   {
@@ -33,24 +34,24 @@ const OrderModel = new Schema(
     },
     customer: {
       type: Schema.Types.ObjectId,
-      ref: "Customer",
+      ref: 'Customer',
     },
     payment: {
       type: Schema.Types.ObjectId,
-      ref: "Payment",
+      ref: 'Payment',
     },
   },
   {
     versionKey: false,
     timestamps: false,
-  }
+  },
 );
 
-OrderModel.set("toJSON", {
+OrderModel.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
-    return lodash.omit(ret, ["_id", "customer", "payment"]);
+    return lodash.omit(ret, ['_id', 'customer', 'payment']);
   },
 });
-module.exports = mongoose.model("Order", OrderModel);
+module.exports = mongoose.model('Order', OrderModel);

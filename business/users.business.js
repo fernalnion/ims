@@ -1,39 +1,35 @@
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
-const jwttoken = require("jsonwebtoken");
-const lodash = require("lodash");
-const logger = require("../libraries/logger").getLogger();
-const { UserModel, TokenModel } = require("../models");
-const { JWT_SECRET, JWT_EXPIRES_IN_MINUTE, REFRESH_TOKEN_EXPIRES_IN_MINUTE } =
-  require("../config").config;
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const jwttoken = require('jsonwebtoken');
+const lodash = require('lodash');
+const logger = require('../libraries/logger').getLogger();
+const { UserModel, TokenModel } = require('../models');
+const { JWT_SECRET, JWT_EXPIRES_IN_MINUTE, REFRESH_TOKEN_EXPIRES_IN_MINUTE } = require('../config').config;
 
 try {
   // methods
-  const randomTokenString = () => crypto.randomBytes(64).toString("hex");
+  const randomTokenString = () => crypto.randomBytes(64).toString('hex');
 
   const getRefreshToken = async (token) => {
-    const refreshToken = await TokenModel.findOne({ token }).populate("user");
-    if (!refreshToken || !refreshToken.isActive)
-      throw new Error("Invalid token");
+    const refreshToken = await TokenModel.findOne({ token }).populate('user');
+    if (!refreshToken || !refreshToken.isActive) { throw new Error('Invalid token'); }
     return refreshToken;
   };
 
-  const generateJwtToken = (user) =>
-    jwttoken.sign({ userid: user.userid }, JWT_SECRET, {
-      expiresIn: parseInt(JWT_EXPIRES_IN_MINUTE, 10),
-    });
+  const generateJwtToken = (user) => jwttoken.sign({ userid: user.userid }, JWT_SECRET, {
+    expiresIn: parseInt(JWT_EXPIRES_IN_MINUTE, 10),
+  });
 
-  const generateRefreshToken = (user, ipAddress) =>
-    new TokenModel({
-      user: user._id,
-      token: randomTokenString(),
-      expires: new Date(
-        Date.now() + parseInt(REFRESH_TOKEN_EXPIRES_IN_MINUTE, 10)
-      ),
-      createdByIp: ipAddress,
-    });
+  const generateRefreshToken = (user, ipAddress) => new TokenModel({
+    user: user._id,
+    token: randomTokenString(),
+    expires: new Date(
+      Date.now() + parseInt(REFRESH_TOKEN_EXPIRES_IN_MINUTE, 10),
+    ),
+    createdByIp: ipAddress,
+  });
 
-  const basicDetails = (user) => lodash.omit(user, ["passwordhash"]);
+  const basicDetails = (user) => lodash.omit(user, ['passwordhash']);
 
   // module exports
   module.exports = {
@@ -90,7 +86,7 @@ try {
     },
     getRefreshTokens: async (userid) => {
       const isuserExist = await UserModel.findOne({ userid });
-      if (!isuserExist) throw new Error("User not found");
+      if (!isuserExist) throw new Error('User not found');
 
       // return refresh tokens for user
       const refreshTokens = await TokenModel.find({ userid });
@@ -98,8 +94,7 @@ try {
     },
 
     jwtToken: (user) => generateJwtToken(user),
-    generateRefreshToken: (user, ipAddress) =>
-      generateRefreshToken(user, ipAddress),
+    generateRefreshToken: (user, ipAddress) => generateRefreshToken(user, ipAddress),
     userBasicDetails: (user) => basicDetails(user),
   };
 } catch (e) {

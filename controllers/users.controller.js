@@ -1,21 +1,21 @@
-const { v4: uuid4 } = require("uuid");
-const bcryptjs = require("bcryptjs");
-const lodash = require("lodash");
-const logger = require("../libraries/logger").getLogger();
-const utilities = require("../libraries/utilities");
-const { UserBusiness } = require("../business");
-const { JWT_EXPIRES_IN_MINUTE } = require("../config").config;
-const { RolesEnum } = require("../enums");
+const { v4: uuid4 } = require('uuid');
+const bcryptjs = require('bcryptjs');
+const lodash = require('lodash');
+const logger = require('../libraries/logger').getLogger();
+const utilities = require('../libraries/utilities');
+const { UserBusiness } = require('../business');
+const { JWT_EXPIRES_IN_MINUTE } = require('../config').config;
+const { RolesEnum } = require('../enums');
 
 try {
   const setTokenCookie = (res, token) => {
     const cookieOptions = {
       httpOnly: true,
       expires: new Date(
-        Date.now() + parseInt(JWT_EXPIRES_IN_MINUTE, 10) * 1000
+        Date.now() + parseInt(JWT_EXPIRES_IN_MINUTE, 10) * 1000,
       ),
     };
-    res.cookie("refreshToken", token, cookieOptions);
+    res.cookie('refreshToken', token, cookieOptions);
   };
 
   module.exports = {
@@ -28,19 +28,19 @@ try {
         const isexist = await UserBusiness.getUser(
           null,
           document.username,
-          document.email
+          document.email,
         );
         if (isexist) {
           return res
             .status(500)
             .send(
               utilities.error(
-                `User already exists(${document.username} / ${document.username})`
-              )
+                `User already exists(${document.username} / ${document.username})`,
+              ),
             );
         }
         const result = await UserBusiness.create(document);
-        return res.status(200).send(utilities.response({ ...result._doc }));
+        return res.status(200).send(utilities.response(result));
       } catch (e) {
         return res.status(500).send(utilities.error(e.message));
       }
@@ -50,24 +50,24 @@ try {
         const user = await UserBusiness.getUser(
           null,
           req.body.username,
-          req.body.email
+          req.body.email,
         );
 
         const isPasswordValid = bcryptjs.compareSync(
           req.body.password,
-          user.passwordhash
+          user.passwordhash,
         );
         if (!isPasswordValid) {
           return res
             .status(500)
-            .send(utilities.error("Invalid username/password!"));
+            .send(utilities.error('Invalid username/password!'));
         }
 
         const remoteAddress = utilities.getIp(req);
         const jwtToken = UserBusiness.jwtToken(user);
         const refreshtoken = UserBusiness.generateRefreshToken(
           user,
-          remoteAddress
+          remoteAddress,
         );
         await refreshtoken.save();
         setTokenCookie(res, refreshtoken.token);
@@ -75,7 +75,7 @@ try {
           utilities.response({
             token: jwtToken,
             refreshtoken: refreshtoken.token,
-          })
+          }),
         );
       } catch (e) {
         return res.status(500).send(utilities.error(e.message));
@@ -84,7 +84,7 @@ try {
     updateUser: async (req, res) => {
       try {
         const document = {
-          ...lodash.omit(req.body, ["_id", "userid", "password"]),
+          ...lodash.omit(req.body, ['_id', 'userid', 'password']),
         };
         await UserBusiness.update(req.params.userid, document);
         return res.status(200).send(utilities.response(true));
@@ -108,7 +108,7 @@ try {
         return res
           .status(200)
           .send(
-            utilities.response(lodash.omit(result, ["_id", "passwordhash"]))
+            utilities.response(lodash.omit(result, ['_id', 'passwordhash'])),
           );
       } catch (e) {
         return res.status(500).send(utilities.error(e.message));
@@ -116,9 +116,7 @@ try {
     },
     getUsers: async (_, res) => {
       try {
-        const result = (await UserBusiness.getAll()).map((m) =>
-          lodash.omit(m, ["_id", "passwordhash"])
-        );
+        const result = (await UserBusiness.getAll()).map((m) => lodash.omit(m, ['_id', 'passwordhash']));
         return res.status(200).send(utilities.response(result));
       } catch (e) {
         return res.status(500).send(utilities.error(e.message));
@@ -140,28 +138,28 @@ try {
       // accept token from request body or cookie
       const token = req.body.token || req.cookies.refreshToken;
       const ipAddress = utilities.getIp(req);
-      if (!token) return res.status(400).json({ message: "Token is required" });
+      if (!token) return res.status(400).json({ message: 'Token is required' });
 
       // users can revoke their own tokens and admins can revoke any tokens
       if (
-        !req.user.ownsToken(token) &&
-        req.user.roleid !== RolesEnum.admin.roleid
+        !req.user.ownsToken(token)
+        && req.user.roleid !== RolesEnum.admin.roleid
       ) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: 'Unauthorized' });
       }
 
       UserBusiness.revokeToken({ token, ipAddress })
-        .then(() => res.json({ message: "Token revoked" }))
+        .then(() => res.json({ message: 'Token revoked' }))
         .catch(next);
     },
 
     getRefreshTokens: (req, res, next) => {
       // users can get their own refresh tokens and admins can get any user's refresh tokens
       if (
-        req.params.userid !== req.user.userid &&
-        req.user.role !== RolesEnum.admin.roleid
+        req.params.userid !== req.user.userid
+        && req.user.role !== RolesEnum.admin.roleid
       ) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: 'Unauthorized' });
       }
 
       UserBusiness.getRefreshTokens(req.user._id)

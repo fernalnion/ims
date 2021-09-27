@@ -1,7 +1,7 @@
-const lodash = require("lodash");
-const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
-const { RolesEnum } = require("../enums");
+const lodash = require('lodash');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
+const { RolesEnum } = require('../enums');
 
 const UserModel = new Schema(
   {
@@ -59,15 +59,15 @@ const UserModel = new Schema(
   {
     versionKey: false,
     timestamps: false,
-  }
+  },
 );
 
-UserModel.set("toJSON", {
+UserModel.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform(doc, ret) {
     // remove these props when object is serialized
-    return lodash.omit(ret, ["_id", "passwordhash"]);
+    return lodash.omit(ret, ['_id', 'passwordhash']);
   },
 });
-module.exports = mongoose.model("User", UserModel);
+module.exports = mongoose.model('User', UserModel);
