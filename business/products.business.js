@@ -37,7 +37,7 @@ try {
     updateQuantity: async (productid, quanity) => {
       const data = await ProductModel.findOne({ productid });
       const { supplier, category } = data;
-      data.quanity += parseInt(quanity, 10);
+      data.quanity += Number(quanity);
       await data.save();
       return {
         ...data._doc,

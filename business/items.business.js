@@ -1,6 +1,7 @@
 const lodash = require("lodash");
 const logger = require("../libraries/logger").getLogger();
 const { ItemModel } = require("../models");
+const ProductBusiness = require("./products.business");
 
 try {
   // module exports
@@ -30,10 +31,17 @@ try {
       return data;
     },
     updateQuantity: async (itemid, quanity) => {
+      // save product utilized count
       const data = await ItemModel.findOne({ itemid });
       const { product, order } = data;
-      data.quanity += parseInt(quanity, 10);
+      data.quanity += Number(quanity);
       await data.save();
+
+      // reduce count from product availability
+      const productTemp = await ProductBusiness.getProduct(product.productid);
+      productTemp.quanity -= Number(quanity);
+      await productTemp.save();
+
       return lodash.omit({
         ...data._doc,
         product: product.productid,
