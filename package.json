@@ -4,8 +4,8 @@
   "description": "Inventory Management System API",
   "main": "index.js",
   "scripts": {
-    "serve": "nodemon index.js",
     "start": "node index.js",
+    "start:dev": "nodemon index.js",
     "eslint": "eslint . --ext .js --fix",
     "commit:precheck": "npm run eslint",
     "cover": "nyc npm test && nyc check-coverage",
