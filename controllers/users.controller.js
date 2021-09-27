@@ -73,7 +73,6 @@ try {
         setTokenCookie(res, refreshtoken.token);
         return res.status(200).send(
           utilities.response({
-            ...UserBusiness.userBasicDetails(user),
             token: jwtToken,
             refreshtoken: refreshtoken.token,
           })
@@ -105,7 +104,7 @@ try {
     },
     getUser: async (req, res) => {
       try {
-        const result = await UserBusiness.getRole(req.params.userid);
+        const result = await UserBusiness.getUser(req.params.userid);
         return res
           .status(200)
           .send(
@@ -128,11 +127,11 @@ try {
 
     refreshToken: (req, res, next) => {
       const token = req.cookies.refreshToken;
-      const ipAddress = req.ip;
+      const ipAddress = utilities.getIp(req);
       UserBusiness.refreshToken({ token, ipAddress })
-        .then(({ refreshToken, ...user }) => {
-          setTokenCookie(res, refreshToken);
-          res.json(user);
+        .then((tokendata) => {
+          setTokenCookie(res, tokendata.refreshToken);
+          res.json(tokendata);
         })
         .catch(next);
     },
@@ -140,7 +139,7 @@ try {
     revokeToken: (req, res, next) => {
       // accept token from request body or cookie
       const token = req.body.token || req.cookies.refreshToken;
-      const ipAddress = req.ip;
+      const ipAddress = utilities.getIp(req);
       if (!token) return res.status(400).json({ message: "Token is required" });
 
       // users can revoke their own tokens and admins can revoke any tokens

@@ -33,8 +33,7 @@ try {
       createdByIp: ipAddress,
     });
 
-  const basicDetails = (user) =>
-    lodash.pick(user, ["userid", "firstname", "lastname", "username", "role"]);
+  const basicDetails = (user) => lodash.omit(user, ["passwordhash"]);
 
   // module exports
   module.exports = {
@@ -85,7 +84,6 @@ try {
       const jwtToken = generateJwtToken(user);
       // return basic details and tokens
       return {
-        ...basicDetails(user),
         token: jwtToken,
         refreshToken: newRefreshToken.token,
       };
