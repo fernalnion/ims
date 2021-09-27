@@ -4,9 +4,10 @@ const UsersRoutes = require('./users.routes');
 const PublicRoutes = require('./public.routes');
 
 const SupplierRoutes = require('./suppliers.routes');
-const CategoryRoutes = require('./categories.routes');
-
 const CustomerRoutes = require('./customers.routes');
+
+const CategoryRoutes = require('./categories.routes');
+const ProductRoutes = require('./products.routes');
 
 const routes = {
   HeartbeatRoutes,
@@ -18,6 +19,7 @@ const routes = {
   SupplierRoutes,
 
   CategoryRoutes,
+  ProductRoutes
 };
 
 module.exports = routes;
