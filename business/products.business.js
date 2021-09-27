@@ -1,5 +1,5 @@
-const logger = require('../libraries/logger').getLogger();
-const { ProductModel } = require('../models');
+const logger = require("../libraries/logger").getLogger();
+const { ProductModel } = require("../models");
 
 try {
   // module exports
@@ -15,7 +15,7 @@ try {
         {
           upsert: true,
           new: false,
-        },
+        }
       ).lean();
       return data;
     },
@@ -23,18 +23,27 @@ try {
     getProduct: async (productid, name) => {
       const data = await ProductModel.findOne({
         $or: [{ productid }, { name }],
-      }).lean();
+      })
+        .populate([{ path: "supplier" }, { path: "category" }])
+        .lean();
       return data;
     },
     getAll: async () => {
-      const data = await ProductModel.find({}).lean();
+      const data = await ProductModel.find({})
+        .populate([{ path: "supplier" }, { path: "category" }])
+        .lean();
       return data;
     },
     updateQuantity: async (productid, quanity) => {
       const data = await ProductModel.findOne({ productid });
+      const { supplier, category } = data;
       data.quanity += parseInt(quanity, 10);
       await data.save();
-      return data._doc;
+      return {
+        ...data._doc,
+        supplier: supplier.supplierid,
+        category: category.categoryid,
+      };
     },
   };
 } catch (e) {

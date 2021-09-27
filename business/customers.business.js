@@ -1,5 +1,5 @@
-const logger = require('../libraries/logger').getLogger();
-const { CustomerModel } = require('../models');
+const logger = require("../libraries/logger").getLogger();
+const { CustomerModel } = require("../models");
 
 try {
   // module exports
@@ -15,7 +15,7 @@ try {
         {
           upsert: true,
           new: false,
-        },
+        }
       ).lean();
       return data;
     },
@@ -23,11 +23,13 @@ try {
     getCustomer: async (customerid, phone, email) => {
       const data = await CustomerModel.findOne({
         $or: [{ customerid }, { phone }, { email }],
-      }).lean();
+      })
+        .populate("User")
+        .lean();
       return data;
     },
     getAll: async () => {
-      const data = await CustomerModel.find({}).lean();
+      const data = await CustomerModel.find({}).populate("User").lean();
       return data;
     },
   };
