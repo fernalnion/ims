@@ -1,5 +1,5 @@
-const logger = require("../libraries/logger").getLogger();
-const { ProductModel } = require("../models");
+const logger = require('../libraries/logger').getLogger();
+const { ProductModel } = require('../models');
 
 try {
   // module exports
@@ -15,7 +15,7 @@ try {
         {
           upsert: true,
           new: false,
-        }
+        },
       ).lean();
       return data;
     },
@@ -30,7 +30,7 @@ try {
       const data = await ProductModel.find({}).lean();
       return data;
     },
-    updateQuantity: (productid, quanity) => {
+    updateQuantity: async (productid, quanity) => {
       const data = await ProductModel.findOne({ productid });
       data.quanity += parseInt(quanity, 10);
       await data.save();

@@ -1,8 +1,8 @@
-const { v4: uuid4 } = require("uuid");
-const lodash = require("lodash");
-const logger = require("../libraries/logger").getLogger();
-const utilities = require("../libraries/utilities");
-const { ProductBusiness } = require("../business");
+const { v4: uuid4 } = require('uuid');
+const lodash = require('lodash');
+const logger = require('../libraries/logger').getLogger();
+const utilities = require('../libraries/utilities');
+const { ProductBusiness } = require('../business');
 
 try {
   module.exports = {
@@ -27,7 +27,7 @@ try {
     updateProduct: async (req, res) => {
       try {
         const document = {
-          ...lodash.omit(req.body, ["_id", "productid"]),
+          ...lodash.omit(req.body, ['_id', 'productid']),
         };
         await ProductBusiness.update(req.params.productid, document);
         return res.status(200).send(utilities.response(true));
@@ -61,11 +61,11 @@ try {
         return res.status(500).send(utilities.error(e.message));
       }
     },
-    updateQuantity: (req, res) => {
+    updateQuantity: async (req, res) => {
       try {
         const result = await ProductBusiness.updateQuantity(
           req.params.productid,
-          req.params.quantity
+          req.params.quantity,
         );
         return res.status(200).send(utilities.response(result));
       } catch (e) {
