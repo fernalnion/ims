@@ -26,7 +26,7 @@ try {
       }).lean();
       return data;
     },
-    isSupplier: async (supplierid, name, phone, email) => {
+    isSupplierExist: async (supplierid, name, phone, email) => {
       const data = await CustomerModel.find({
         $and: [
           {

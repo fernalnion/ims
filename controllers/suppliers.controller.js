@@ -1,8 +1,8 @@
-const { v4: uuid4 } = require('uuid');
-const lodash = require('lodash');
-const logger = require('../libraries/logger').getLogger();
-const utilities = require('../libraries/utilities');
-const { SupplierBusiness } = require('../business');
+const { v4: uuid4 } = require("uuid");
+const lodash = require("lodash");
+const logger = require("../libraries/logger").getLogger();
+const utilities = require("../libraries/utilities");
+const { SupplierBusiness } = require("../business");
 
 try {
   module.exports = {
@@ -12,21 +12,27 @@ try {
           supplierid: uuid4(),
           ...req.body,
         };
-        const isexist = await SupplierBusiness.getSupplier(
+
+        const isexist = await SupplierBusiness.isSupplierExist(
           null,
           document.name,
           document.phone,
-          document.email,
+          document.email
         );
-        if (isexist) {
+        if (isexist && isexist.length > 0) {
           return res
             .status(500)
             .send(
               utilities.error(
-                `Supplier already exists(${document.name} / ${document.phone} / ${document.email})`,
-              ),
+                isexist.find((x) => x.name === document.name)
+                  ? `Supplier already exists with Name : ${document.name}`
+                  : isexist.find((x) => x.phone === document.phone)
+                  ? `Supplier already exists with phone number : ${document.phone}`
+                  : `Supplier already exists with email : ${document.email}`
+              )
             );
         }
+
         const result = await SupplierBusiness.create(document);
         return res.status(200).send(utilities.response(result));
       } catch (e) {
@@ -36,8 +42,29 @@ try {
     updateSupplier: async (req, res) => {
       try {
         const document = {
-          ...lodash.omit(req.body, ['_id', 'supplierid']),
+          ...lodash.omit(req.body, ["_id"]),
         };
+
+        const isexist = await SupplierBusiness.isSupplierExist(
+          document.supplierid,
+          document.name,
+          document.phone,
+          document.email
+        );
+        if (isexist && isexist.length > 0) {
+          return res
+            .status(500)
+            .send(
+              utilities.error(
+                isexist.find((x) => x.name === document.name)
+                  ? `Supplier already exists with Name : ${document.name}`
+                  : isexist.find((x) => x.phone === document.phone)
+                  ? `Supplier already exists with phone number : ${document.phone}`
+                  : `Supplier already exists with email : ${document.email}`
+              )
+            );
+        }
+
         await SupplierBusiness.update(req.params.supplierid, document);
         return res.status(200).send(utilities.response(true));
       } catch (e) {
@@ -57,7 +84,7 @@ try {
     getSupplier: async (req, res) => {
       try {
         const result = await SupplierBusiness.getSupplier(
-          req.params.supplierid,
+          req.params.supplierid
         );
         return res.status(200).send(utilities.response(result));
       } catch (e) {
