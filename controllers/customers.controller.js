@@ -14,22 +14,28 @@ try {
           ...req.body,
           user: req.user._id.toString(),
         };
-        const isexist = await CustomerBusiness.getCustomer(
+        const isexist = await CustomerBusiness.isCustomerExist(
           null,
           document.phone,
           document.email
         );
-        if (isexist) {
+        if (isexist && isexist.length > 0) {
           return res
             .status(500)
             .send(
               utilities.error(
-                `Customer already exists(${document.phone} / ${document.email})`
+                isexist.find((x) => x.phone === document.phone)
+                  ? `Customer already exists with phone number : ${document.phone}`
+                  : `Customer already exists with email : ${document.email}`
               )
             );
         }
         const result = await CustomerBusiness.create(document);
-        return res.status(200).send(utilities.response({...result, user: result.user._id.toString()}));
+        return res
+          .status(200)
+          .send(
+            utilities.response({ ...result, user: result.user._id.toString() })
+          );
       } catch (e) {
         return res.status(500).send(utilities.error(e.message));
       }
@@ -37,8 +43,25 @@ try {
     updateCustomer: async (req, res) => {
       try {
         const document = {
-          ...lodash.omit(req.body, ["_id", "customerid"]),
+          ...lodash.omit(req.body, ["_id"]),
         };
+
+        const isexist = await CustomerBusiness.isCustomerExist(
+          document.customerid,
+          document.phone,
+          document.email
+        );
+        if (isexist && isexist.length > 0) {
+          return res
+            .status(500)
+            .send(
+              utilities.error(
+                isexist.find((x) => x.phone === document.phone)
+                  ? `Customer already exists with phone number : ${document.phone}`
+                  : `Customer already exists with email : ${document.email}`
+              )
+            );
+        }
         await CustomerBusiness.update(req.params.customerid, document);
         return res.status(200).send(utilities.response(true));
       } catch (e) {

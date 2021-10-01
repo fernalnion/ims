@@ -26,6 +26,19 @@ try {
       }).lean();
       return data;
     },
+    isCustomerExist: async (customerid, phone, email) => {
+      const data = await CustomerModel.find({
+        $and: [
+          {
+            customerid: { $ne: customerid },
+          },
+          {
+            $or: [{ phone }, { email }],
+          },
+        ],
+      }).lean();
+      return data;
+    },
     getAll: async () => {
       const data = await CustomerModel.find({}).lean();
       return data;

@@ -5,12 +5,12 @@ try {
     response: (data) => ({
       data,
       error: false,
-      errorMessage: null,
+      message: null,
     }),
-    error: (errorMessage) => ({
+    error: (message) => ({
       data: null,
       error: true,
-      errorMessage,
+      message,
     }),
     getIp: (req) => {
       const remoteAddress = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress;
