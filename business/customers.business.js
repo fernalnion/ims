@@ -23,13 +23,11 @@ try {
     getCustomer: async (customerid, phone, email) => {
       const data = await CustomerModel.findOne({
         $or: [{ customerid }, { phone }, { email }],
-      })
-        .populate("User")
-        .lean();
+      }).lean();
       return data;
     },
     getAll: async () => {
-      const data = await CustomerModel.find({}).populate("User").lean();
+      const data = await CustomerModel.find({}).lean();
       return data;
     },
   };

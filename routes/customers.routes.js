@@ -7,7 +7,7 @@ try {
   // users
   router.get('/', CustomerController.getCustomers);
   router.get('/:customerid', CustomerController.getCustomer);
-  router.post('/create', [isMaganer], CustomerController.createCustomer);
+  router.post('/', [isMaganer], CustomerController.createCustomer);
   router.put('/:customerid', [isMaganer], CustomerController.updateCustomer);
   router.delete('/:customerid', [isMaganer], CustomerController.deleteCustomer);
   module.exports = router;

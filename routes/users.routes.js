@@ -6,8 +6,8 @@ const { isMaganer } = require('../middleware').rolesMiddleware;
 try {
   // users
   router.get('/', [isMaganer], UserController.getUsers);
-  router.get('/:userid', UserController.getUser);
-  router.post('/create', [isMaganer], UserController.createUser);
+  router.get('/user', UserController.getUser);
+  router.post('/', [isMaganer], UserController.createUser);
   router.put('/:userid', [isMaganer], UserController.updateUser);
   router.delete('/:userid', [isMaganer], UserController.deleteUser);
 

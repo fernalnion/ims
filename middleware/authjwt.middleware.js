@@ -23,7 +23,7 @@ try {
 
         // authentication and authorization successful
         req.user = await UserBusiness.getUser(decoded.userid);
-        const refreshTokens = await UserBusiness.getRefreshTokens(req.user._id);
+        const refreshTokens = await UserBusiness.getRefreshTokens(req.user.userid);
         req.user.ownsToken = (temptoken) => !!refreshTokens.find((x) => x.token === temptoken);
         next();
       });

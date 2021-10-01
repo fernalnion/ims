@@ -7,7 +7,7 @@ try {
   // users
   router.get('/', SupplierController.getSuppliers);
   router.get('/:supplierid', SupplierController.getSupplier);
-  router.post('/create', [isMaganer], SupplierController.createSupplier);
+  router.post('/', [isMaganer], SupplierController.createSupplier);
   router.put('/:supplierid', [isMaganer], SupplierController.updateSupplier);
   router.delete('/:supplierid', [isMaganer], SupplierController.deleteSupplier);
   module.exports = router;

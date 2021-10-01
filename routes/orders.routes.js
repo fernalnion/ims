@@ -5,7 +5,7 @@ const { OrderController } = require("../controllers");
 try {
   // users
   router.get("/:categoryid", OrderController.getOrder);
-  router.post("/create", OrderController.createCategory);
+  router.post("/", OrderController.createCategory);
   module.exports = router;
 } catch (e) {
   logger.error(e);

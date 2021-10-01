@@ -7,7 +7,7 @@ try {
   // users
   router.get('/', CategoryController.getCategories);
   router.get('/:categoryid', CategoryController.getCategory);
-  router.post('/create', [isMaganer], CategoryController.createCategory);
+  router.post('/', [isMaganer], CategoryController.createCategory);
   router.put('/:categoryid', [isMaganer], CategoryController.updateCategory);
   router.delete('/:categoryid', [isMaganer], CategoryController.deleteCategory);
   module.exports = router;

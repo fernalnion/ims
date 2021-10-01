@@ -16,7 +16,7 @@ try {
     return refreshToken;
   };
 
-  const generateJwtToken = (user) => jwttoken.sign({ userid: user.userid }, JWT_SECRET, {
+  const generateJwtToken = (user) => jwttoken.sign(lodash.omit(user, ['passwordhash', '_id']), JWT_SECRET, {
     expiresIn: parseInt(JWT_EXPIRES_IN_MINUTE, 10),
   });
 

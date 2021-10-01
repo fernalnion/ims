@@ -7,7 +7,7 @@ try {
   // users
   router.get("/", ItemController.getItems);
   router.get("/:itemid", ItemController.getItem);
-  router.post("/create", [isMaganer], ItemController.createItem);
+  router.post("/", [isMaganer], ItemController.createItem);
   router.put("/:itemid", ItemController.updateItem);
   router.delete("/:itemid", [isMaganer], ItemController.deleteItem);
   router.put("/:itemid/:quantity", ItemController.updateQuantity);

@@ -19,7 +19,7 @@ services:
     build:
       context: ../
       dockerfile: docker/dockerfile
-    container_name: ims_applocation
+    container_name: ims-api
     restart: always
     links:
       - mongo

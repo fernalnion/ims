@@ -6,7 +6,7 @@ try {
   // users
   router.get("/", PaymentController.getPayments);
   router.get("/:paymentid", PaymentController.getPayment);
-  router.post("/create", PaymentController.createPayment);
+  router.post("/", PaymentController.createPayment);
   router.put("/:paymentid", PaymentController.updatePayment);
   module.exports = router;
 } catch (e) {
